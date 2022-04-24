@@ -21,9 +21,8 @@ function liked(state, action) {
 
 function like(state, action) {
   if (!state.addresses.includes(action.caller)) {
-    state = {
-      addresses: [...state.addresses, action.caller]
-    }
+    state.addresses = [...state.addresses, action.caller]
+
   }
   return { state }
 }
