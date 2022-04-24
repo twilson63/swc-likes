@@ -12,25 +12,60 @@
 
 <body>
   <h1>Hello World</h1>
-  <button>Connect</button>
+  <button id="create">Create</button>
+  <button id="like">Like</button>
+  <div id="count">0</div>
+  <button id="load">Load</button>
   <script>
-    const btn = document.querySelector('button')
+    window.contractId = 'U_Mp6hK4nHhyWg6p-Su0XVBOuw13FA_9iGtetesds8M'
+
+    const arweave = Arweave.init({
+      host: 'arweave.net',
+      port: 443,
+      protocol: 'https'
+    })
+
+    window.smartweave = rsdk.SmartWeaveWebFactory
+      //.memCached(arweave)
+      .memCachedBased(arweave)
+      .useRedStoneGateway().build()
+
+    document.getElementById('load').addEventListener('click', async () => {
+
+      const contract = window.smartweave.contract(window.contractId).connect('use_wallet')
+
+      const { result } = await contract.viewState({ function: 'likes' })
+      console.log('likes', result.likes)
+      document.getElementById('count').innerHTML = result.likes
+
+
+    })
+
+    const btn = document.getElementById('create')
     btn.addEventListener('click', async () => {
-      await arweaveWallet.connect([
-        "ACCESS_ADDRESS",
-        "ACCESS_PUBLIC_KEY",
-        "SIGN_TRANSACTION",
-        "DISPATCH",
-        "ENCRYPT",
-        "DECRYPT",
-      ])
-      const arweave = Arweave.init({})
-      window.smartweave = rsdk.SmartWeaveWebFactory.memCachedBased(arweave)
-        .useRedStoneGateway().build()
-      window.smartweave.createContract.deployFromSourceTx({
-        srcTxId: '',
-        initState: '{}'
+
+      const result = await window.smartweave.createContract.deployFromSourceTx({
+        srcTxId: 'ERm2adv9-bzSl3ifzKyet6K19juKAG9jzLn0hNZ5oLw',
+        initState: JSON.stringify({ addresses: [] })
       }, true)
+      console.log(result)
+      window.contractId = result
+    })
+
+    const like = document.getElementById('like')
+    like.addEventListener('click', async () => {
+      console.log('contract: ', window.contractId)
+      const contract = await window.smartweave.contract(window.contractId).connect('use_wallet')
+
+      const result = await contract
+        .writeInteraction({
+          function: 'like',
+          address: 'NPenNH32-7ZJ5ygla95Unp8Nh082-NBOc66nRB2Hprs'
+        })
+      console.log('writeInteraction', result)
+
+      // const state = await contract.viewState({ function: 'likes' })
+      // console.log(state)
     })
   </script>
 </body>

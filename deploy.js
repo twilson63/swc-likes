@@ -2,11 +2,13 @@ import Arweave from 'arweave'
 import { SmartWeaveNodeFactory, LoggerFactory } from 'redstone-smartweave'
 import fs from 'fs'
 
-const arweave = Arweave.init({
+const conn = {
   host: 'arweave.net',
   port: 443,
   protocol: 'https'
-})
+}
+
+const arweave = Arweave.init(conn)
 
 LoggerFactory.INST.logLevel('error');
 const smartweave = SmartWeaveNodeFactory.memCached(arweave)
