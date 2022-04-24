@@ -17,8 +17,8 @@
   <div id="count">0</div>
   <button id="load">Load</button>
   <script>
-    window.contractId = 'U_Mp6hK4nHhyWg6p-Su0XVBOuw13FA_9iGtetesds8M'
-
+    //window.contractId = 'U_Mp6hK4nHhyWg6p-Su0XVBOuw13FA_9iGtetesds8M'
+    window.contractId = 'cmy5cbTmo6EanGCab77dayh9Pm_hUbA4a235afTfuyA'
     const arweave = Arweave.init({
       host: 'arweave.net',
       port: 443,
@@ -59,8 +59,7 @@
 
       const result = await contract
         .writeInteraction({
-          function: 'like',
-          address: 'NPenNH32-7ZJ5ygla95Unp8Nh082-NBOc66nRB2Hprs'
+          function: 'like'
         })
       console.log('writeInteraction', result)
 
