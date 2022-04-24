@@ -2,7 +2,7 @@
  * likes contract
  * 
  * {
- *   likes: []
+ *   addresses: []
  * }
  */
 const functions = { like, unlike, likes, liked }
@@ -16,21 +16,21 @@ export function handle(state, action) {
 }
 
 function liked(state, action) {
-  return { result: { tx: state.tx, liked: state.likes.includes(action.caller) } }
+  return { result: { tx: state.tx, liked: state.addresses.includes(action.caller) } }
 }
 
 function like(state, action) {
-  if (!state.users.includes(action.caller)) {
-    state.likes = [...state.likes, action.caller]
+  if (!state.addresses.includes(action.caller)) {
+    state.addresses = [...state.addresses, action.caller]
   }
   return { state }
 }
 
 function unlike(state, action) {
-  state.likes = state.likes.filter(address => address !== action.caller)
+  state.addresses = state.addresses.filter(address => address !== action.caller)
   return { state }
 }
 
 function likes(state, action) {
-  return { result: { likes: state.likes.length } }
+  return { result: { likes: state.addresses.length } }
 }
