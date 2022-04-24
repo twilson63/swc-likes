@@ -3,9 +3,9 @@ import { SmartWeaveNodeFactory, LoggerFactory } from 'redstone-smartweave'
 import fs from 'fs'
 
 const arweave = Arweave.init({
-  host: '127.0.0.1',
-  port: 1984,
-  protocol: 'http'
+  host: 'arweave.net',
+  port: 443,
+  protocol: 'https'
 })
 
 LoggerFactory.INST.logLevel('error');
