@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>
+    SmartWeave Test
+  </title>
+  <script src="https://unpkg.com/arweave/bundles/web.bundle.min.js"></script>
+  <script src="https://unpkg.com/redstone-smartweave/bundles/web.bundle.min.js"></script>
+
+</head>
+
+<body>
+  <h1>Hello World</h1>
+  <button>Connect</button>
+  <script>
+    const btn = document.querySelector('button')
+    btn.addEventListener('click', async () => {
+      await arweaveWallet.connect([
+        "ACCESS_ADDRESS",
+        "ACCESS_PUBLIC_KEY",
+        "SIGN_TRANSACTION",
+        "DISPATCH",
+        "ENCRYPT",
+        "DECRYPT",
+      ])
+      const arweave = Arweave.init({})
+      window.smartweave = rsdk.SmartWeaveWebFactory.memCachedBased(arweave)
+        .useRedStoneGateway().build()
+      window.smartweave.createContract.deployFromSourceTx({
+        srcTxId: '',
+        initState: '{}'
+      }, true)
+    })
+  </script>
+</body>
+
+</html>
