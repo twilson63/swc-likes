@@ -58,7 +58,7 @@
       const contract = await window.smartweave.contract(window.contractId).connect('use_wallet')
 
       const result = await contract
-        .writeInteraction({
+        .bundleInteraction({
           function: 'like'
         })
       console.log('writeInteraction', result)

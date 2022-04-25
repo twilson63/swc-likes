@@ -47,7 +47,7 @@
     document.getElementById('like').addEventListener('click', async () => {
       const interaction = await smartweave.contract(contract)
         .connect('use_wallet')
-        .writeInteraction({ function: 'like' })
+        .bundleInteraction({ function: 'like' })
       console.log(interaction)
 
     })
