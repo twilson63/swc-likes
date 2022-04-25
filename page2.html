@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>Test</title>
+  <script src="https://unpkg.com/arweave/bundles/web.bundle.min.js"></script>
+  <script src="https://unpkg.com/redstone-smartweave/bundles/web.bundle.min.js"></script>
+
+</head>
+
+<body>
+  <h1>Redstone Smartweave Test</h1>
+  <div>Contract: <span id="contract"></span></div>
+  <div>Likes: <span id="likes"></span></div>
+
+  <button id="create">Create Contract</button>
+  <button id="like">Like</button>
+  <button id="load">Load Likes</button>
+  <button id="load2">Load2 Likes</button>
+  <script>
+    const arweave = Arweave.init({
+      host: 'arweave.net',
+      port: 443,
+      protocol: 'https'
+    })
+    const CONTRACT_SRC = "Hljxh8rYyXCb45BYULHb6KhUDnRkxc4ZUaUDCUkOP_w"
+    const gatewayUrl = "https://gateway.redstone.finance";
+    //const gatewayUrl = 'https://arweave.net'
+    const smartweave = rsdk.SmartWeaveWebFactory.memCachedBased(arweave)
+      //.setInteractionsLoader(new rsdk.RedstoneGatewayInteractionsLoader(gatewayUrl))
+      .useRedStoneGateway({ notCorrupted: true })
+      .build()
+
+    console.log(smartweave)
+
+    let contract = '7bOf8aQc6810jYK0dQiEQ0Hmv17aPYmjwtV01g_JudM'
+
+    document.getElementById('create').addEventListener('click', async () => {
+      contract = await smartweave.createContract.deployFromSourceTx({
+        srcTxId: CONTRACT_SRC,
+        initState: JSON.stringify({ addresses: [] })
+      }, true)
+      console.log(contract)
+      document.getElementById('contract').innerHTML = contract
+    })
+
+    document.getElementById('like').addEventListener('click', async () => {
+      const interaction = await smartweave.contract(contract)
+        .connect('use_wallet')
+        .writeInteraction({ function: 'like' })
+      console.log(interaction)
+
+    })
+
+    document.getElementById('load').addEventListener('click', async () => {
+      const { state } = await smartweave.contract(contract)
+        .connect('use_wallet')
+        // is free
+        .readState()
+      console.log(state)
+      document.getElementById('likes').innerHTML = state.addresses.length
+
+    })
+
+    document.getElementById('load2').addEventListener('click', async () => {
+      const { result } = await smartweave.contract(contract)
+        .connect('use_wallet')
+        // transaction cost
+        .viewState({ function: 'likes' })
+      console.log(result)
+      //document.getElementById('likes').innerHTML = state.addresses.length
+
+    })
+  </script>
+</body>
+
+</html>
