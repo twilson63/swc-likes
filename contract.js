@@ -1,11 +1,8 @@
 /**
- * likes contract
+ * permanotes contract
  * 
- * {
- *   addresses: []
- * }
  */
-const functions = { like, unlike, likes, liked }
+const functions = { like, unlike }
 
 export function handle(state, action) {
   if (Object.keys(functions).includes(action.input.function)) {
@@ -15,23 +12,14 @@ export function handle(state, action) {
   throw new ContractError(`No function supplied or function not recognised: "${input.function}"`);
 }
 
-function liked(state, action) {
-  return { result: { tx: state.tx, liked: state.addresses.includes(action.caller) } }
-}
-
 function like(state, action) {
-  if (!state.addresses.includes(action.caller)) {
-    state.addresses = [...state.addresses, action.caller]
-
+  if (!state.likes.includes(action.caller)) {
+    state.likes = [...state.likes, action.caller]
   }
   return { state }
 }
 
 function unlike(state, action) {
-  state.addresses = state.addresses.filter(address => address !== action.caller)
+  state.likes = state.likes.filter(address => address !== action.caller)
   return { state }
-}
-
-function likes(state, action) {
-  return { result: { likes: state.addresses.length } }
 }
